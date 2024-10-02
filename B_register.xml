@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+
+<scenario name="register_from_A">
+
+<recv request="REGISTER" >
+</recv>
+
+<send >
+<![CDATA[
+SIP/2.0 100 Trying
+[last_From:]
+[last_To:]
+[last_Via:]
+[last_Call-ID:]
+[last_CSeq:]
+Contact: <sip:[local_ip]:[local_port]> 
+[last_Record-Route:]
+Content-Length: 0
+]]>
+</send>
+
+<send >
+<![CDATA[
+SIP/2.0 401 Unauthorized
+[last_From:]
+[last_To:];tag=[call_number]
+[last_Via:]
+[last_Call-ID:]
+[last_Cseq:]
+WWW-Authenticate: Digest realm="ss7demo.lab.cirpack.com",nonce="00000acd29b0016738ed40e93cf545c6",opaque="00000ac74f2d2ff",stale=false,algorithm=MD5
+Content-Length: 0
+]]>
+</send>
+
+<recv request="REGISTER" >
+</recv>
+
+<send >
+<![CDATA[
+SIP/2.0 200 OK      
+[last_From:]
+[last_To:]
+[last_Via:] 
+[last_Call-ID:]
+[last_Cseq:]
+[last_Contact:];expires=80000
+Service-Route: <sip:[local_ip]:[local_port];transport=udp;lr>
+Content-Length: [len]
+]]>
+</send>
+
+<pause milliseconds="1000"/>
+</scenario>
