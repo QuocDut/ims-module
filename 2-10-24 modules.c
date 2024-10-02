@@ -1,3 +1,14 @@
+/**
+ * @Proxy Call Session Control Function
+ * @file modules.c
+ * @brief This module provides functionalities for managing and interacting with various IMS (Inventory Management System) components.
+ *
+ * This module includes functions for adding, removing, and updating inventory items, as well as querying inventory status and generating reports.
+ *
+ * Detailed description of the module, including its purpose, usage, and any important notes.
+ * Purpose: To facilitate inventory management operations within the IMS. * - Usage: Include this module in your project to access inventory management functions.
+ * Important Notes: Ensure that the database connection is properly configured before using this module.
+ **/
 #include <sys/socket.h>
 #include <arpa/inet.h>
 #include <stdio.h>
