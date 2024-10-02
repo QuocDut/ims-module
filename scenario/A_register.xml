@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+
+<scenario name="register_from_A">
+
+<label id="1"></label>
+
+<nop>
+<action>
+<assignstr assign_to="REQUEST_URI" value="sip:[field1]@[remote_ip]:[remote_port]"/>
+<assignstr assign_to="FROM_REQUEST" value="[field0] <sip:[field1]@[local_ip]:[local_port]>;tag=[call_number]-1-1"/>
+<assignstr assign_to="TO_REQUEST" value="[field0] <sip:[field1]@[local_ip]:[local_port]>"/>
+</action>
+</nop>
+
+<send >
+<![CDATA[
+REGISTER [$REQUEST_URI] SIP/2.0
+To: [$TO_REQUEST]
+From: [$FROM_REQUEST]
+Via: SIP/2.0/[transport] [local_ip]:[local_port];branch=[branch]
+Call-ID: [call_id]
+CSeq: 1 REGISTER
+Contact: <sip:[local_ip]:[local_port]> 
+Expires: 80000
+Max-Forwards: 70
+Allow: INVITE, ACK, CANCEL, OPTIONS, BYE, REFER, NOTIFY, MESSAGE, SUBSCRIBE, INFO
+User-Agent: on flippe
+Content-Length: 0
+]]>
+</send>
+
+<recv response="100" >
+</recv>
+
+<recv response="401" optional="true" auth="true" next="2">
+</recv>
+
+<recv response="200" next="3">
+<action>
+<ereg regexp="(.*)" search_in="hdr" header="To:" assign_to="TO_REQUEST"/>
+</action>
+</recv>
+
+<label id="2"></label>
+
+<send >
+<![CDATA[
+REGISTER [$REQUEST_URI] SIP/2.0
+[last_From:]
+[last_To:]
+Via: SIP/2.0/[transport] [local_ip]:[local_port];branch=[branch]
+[last_Call-ID:]
+CSeq: [last_cseq_number+1] REGISTER
+Contact: <sip:[local_ip]:[local_port]> 
+Expires: 80000
+Max-Forwards: 70
+Allow: INVITE, ACK, CANCEL, OPTIONS, BYE, REFER, NOTIFY, MESSAGE, SUBSCRIBE, INFO
+User-Agent: on flippe
+[field4]
+Content-Length: 0
+]]>
+</send>
+
+<recv response="100" >
+</recv>
+
+<recv response="200" >
+<action>
+<ereg regexp="(.*)" search_in="hdr" header="To:" assign_to="TO_REQUEST"/>
+</action>
+</recv>
+
+<label id="3"></label>
+
+<pause milliseconds="1000"/>
+
+</scenario>
